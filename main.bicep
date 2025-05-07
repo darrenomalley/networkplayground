@@ -1,5 +1,5 @@
-
 param location string = 'eastus2'
+param resourceGroupName string = 'RG_NetworkingPlayground'
 param vnet1Name string = 'VNet1'
 param vnet2Name string = 'VNet2'
 param vnet1AddressPrefix string = '10.0.0.0/16'
@@ -9,9 +9,15 @@ param vnet2SubnetName string = 'Subnet2'
 param vnet1SubnetPrefix string = '10.0.0.0/24'
 param vnet2SubnetPrefix string = '10.1.0.0/24'
 
+resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: resourceGroupName
+  location: location
+}
+
 resource vnet1 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: vnet1Name
   location: location
+  dependsOn: [rg]
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -32,6 +38,7 @@ resource vnet1 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 resource vnet2 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: vnet2Name
   location: location
+  dependsOn: [rg]
   properties: {
     addressSpace: {
       addressPrefixes: [
